@@ -23,12 +23,12 @@ include_directories (
 )
 ```
  
-Then in your game, you make an animation node like this:
+Then in your game layer, you make an animation node like this:
 
 ```cpp
 #include <SpriterNode.h>
 
-//an update or init method somewhere ...
+//an update or init method in a Node or Layer 
 
     //path to your scml in your Resources folder
     auto scml = FileUtils::getInstance()->fullPathForFilename("my_animation.scml");
