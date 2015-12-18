@@ -7,6 +7,7 @@
 
 namespace cocos2d {
 	class Node;
+	class Sprite;
 }
 
 namespace Spriter2dX
@@ -15,7 +16,8 @@ namespace Spriter2dX
 	class CCFileFactory : public SpriterEngine::FileFactory
 	{
 	public:
-		CCFileFactory(cocos2d::Node* parent);
+		typedef std::function<cocos2d::Sprite*(const std::string&)> SpriteLoader;
+		CCFileFactory(cocos2d::Node* parent, SpriteLoader loader);
 		~CCFileFactory();
 		
 		SpriterEngine::ImageFile *newImageFile(const std::string& initialFilePath, SpriterEngine::point initialDefaultPivot) override;

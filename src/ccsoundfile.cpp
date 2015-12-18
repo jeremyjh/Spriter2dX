@@ -3,7 +3,7 @@
 #include "../SpriterPlusPlus/spriterengine/global/settings.h"
 
 #include "ccsoundobjectinforeference.h"
-#include <SimpleAudioEngine.h>
+#include <audio/include/SimpleAudioEngine.h>
 
 namespace se = SpriterEngine;
 
