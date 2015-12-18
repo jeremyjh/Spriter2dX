@@ -23,7 +23,8 @@ set(SOURCE_FILES
 )
 
 find_package(TINYXML2 REQUIRED)
-include_directories(${TINYXML2_INCLUDE_DIR})
+find_package(Cocos2dX REQUIRED)
+include_directories(${TINYXML2_INCLUDE_DIR} ${COCOS2D_INCLUDE_DIR})
 
 add_library(spriter2dx STATIC ${SOURCE_FILES})
 

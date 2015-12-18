@@ -12,15 +12,24 @@
 
 #include <2d/CCNode.h>
 
+namespace cocos2d {
+    class Sprite;
+}
+
 namespace Spriter2dX {
+    typedef std::function<cocos2d::Sprite*(const std::string&)> SpriteLoader;
     class SpriterNode : public cocos2d::Node {
     public:
-        SpriterNode(const std::string& scmlFile);
+        SpriterNode(const std::string& scmlFile, SpriteLoader loader);
         void update (float dt) override;
         SpriterEngine::EntityInstance* createEntity(const std::string& name);
-        static SpriterNode* create(const std::string& scmlFile);
+        static SpriterNode* create(const std::string& scmlFile, SpriteLoader loader = fileLoader());
+
         virtual void onEnter() override;
         virtual void onExit() override;
+
+        static SpriteLoader fileLoader();
+        static SpriteLoader cacheLoader();
     private:
         CCFileFactory* files;
         std::vector<std::unique_ptr<SpriterEngine::EntityInstance>> entities;

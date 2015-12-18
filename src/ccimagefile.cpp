@@ -1,7 +1,7 @@
 #include "ccimagefile.h"
 #include "../SpriterPlusPlus/spriterengine/objectinfo/universalobjectinterface.h"
 #include <2d/CCSprite.h>
-#include <CCFileUtils.h>
+#include <platform/CCFileUtils.h>
 #include <sstream>
 
 namespace se = SpriterEngine;
@@ -12,8 +12,9 @@ namespace Spriter2dX
 
 	CCImageFile::CCImageFile(std::string initialFilePath
                             ,se::point initialDefaultPivot
-                            ,cc::Node* parent) :
-		se::ImageFile(initialFilePath,initialDefaultPivot), parent(parent)
+                            ,cc::Node* parent
+                            ,SpriteLoader loader ) :
+		se::ImageFile(initialFilePath,initialDefaultPivot), parent(parent), loader(loader)
 	{
 	}
 
@@ -34,19 +35,9 @@ namespace Spriter2dX
         sprite->setPosition(float(spriteInfo->getPosition().x), -float(spriteInfo->getPosition().y));
         sprite->setRotation(float(se::toDegrees(spriteInfo->getAngle())));
         sprite->setScale(float(spriteInfo->getScale().x), float(spriteInfo->getScale().y));
-        sprite->setAnchorPoint(cc::Vec2(float(spriteInfo->getPivot().x), float(spriteInfo->getPivot().y)));
+        sprite->setAnchorPoint(cc::Vec2(float(spriteInfo->getPivot().x), 1.0f - float(spriteInfo->getPivot().y)));
         sprite->setVisible(true);
 	}
-
-    std::vector<std::string> split(const std::string& s, char delim) {
-        std::stringstream ss(s);
-        std::string item;
-        std::vector<std::string> elems;
-        while (std::getline(ss, item, delim)) {
-            elems.push_back(item);
-        }
-        return elems;
-    }
 
     cc::Sprite* CCImageFile::nextSprite()
     {
@@ -55,8 +46,7 @@ namespace Spriter2dX
             sprite = avail.back();
             avail.pop_back();
         } else {
-            auto fullpath = split(path(), '/');
-            sprite = cc::Sprite::createWithSpriteFrameName(fullpath.back());
+            sprite = loader(path());
             if (sprite)
             {
                 parent->addChild(sprite);

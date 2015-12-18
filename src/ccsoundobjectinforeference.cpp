@@ -1,5 +1,5 @@
 #include "ccsoundobjectinforeference.h"
-#include <SimpleAudioEngine.h>
+#include <audio/include/SimpleAudioEngine.h>
 
 namespace Spriter2dX
 {
