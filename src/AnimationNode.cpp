@@ -4,19 +4,18 @@
 #include <2d/CCSprite.h>
 #include <sstream>
 
-#include "SpriterNode.h"
-#include "ccfilefactory.h"
+#include "AnimationNode.h"
 #include "ccobjectfactory.h"
 
 namespace cc = cocos2d;
 namespace se = SpriterEngine;
 
 namespace Spriter2dX {
-    SpriterNode::SpriterNode(const std::string& scmlFile, SpriteLoader loader)
+    AnimationNode::AnimationNode(const std::string& scmlFile, SpriteLoader loader)
             : files(new CCFileFactory(this,loader))
             , model(scmlFile, files, new CCObjectFactory(this)) {}
 
-    void SpriterNode::update(float dt)
+    void AnimationNode::update(float dt)
     {
         files->resetSprites();
         for (auto &entity: entities) {
@@ -26,16 +25,16 @@ namespace Spriter2dX {
         }
     }
 
-    se::EntityInstance* SpriterNode::createEntity(const std::string& name)
+    se::EntityInstance* AnimationNode::createEntity(const std::string& name)
     {
         auto entity = model.getNewEntityInstance(name);
         entities.push_back(std::unique_ptr<se::EntityInstance>(entity));
         return entity;
     }
 
-    SpriterNode* SpriterNode::create(const std::string& scmlFile, SpriteLoader loader)
+    AnimationNode* AnimationNode::create(const std::string& scmlFile, SpriteLoader loader)
     {
-        SpriterNode* ret = new (std::nothrow) SpriterNode(scmlFile, loader);
+        AnimationNode * ret = new (std::nothrow) AnimationNode(scmlFile, loader);
         if (ret && ret->init())
         {
             ret->autorelease();
@@ -47,7 +46,7 @@ namespace Spriter2dX {
         return ret;
     }
 
-    SpriteLoader SpriterNode::fileLoader()
+    SpriteLoader AnimationNode::fileLoader()
     {
         return [](const std::string& name) { return cc::Sprite::create(name);};
     }
@@ -62,7 +61,7 @@ namespace Spriter2dX {
         return elems;
     }
 
-    SpriteLoader SpriterNode::cacheLoader()
+    SpriteLoader AnimationNode::cacheLoader()
     {
         return [](const std::string& name) {
             auto fullpath = split(name, '/');
@@ -70,12 +69,12 @@ namespace Spriter2dX {
         };
     }
 
-    void SpriterNode::onEnter() {
+    void AnimationNode::onEnter() {
         cc::Node::onEnter();
         this->scheduleUpdate();
     }
 
-    void SpriterNode::onExit() {
+    void AnimationNode::onExit() {
         cc::Node::onExit();
         this->unscheduleUpdate();
     }

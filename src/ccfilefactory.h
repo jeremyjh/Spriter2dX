@@ -3,20 +3,13 @@
 
 #include <memory>
 #include "../SpriterPlusPlus/spriterengine/override/filefactory.h"
-#include "../SpriterPlusPlus/spriterengine/override/imagefile.h"
-
-namespace cocos2d {
-	class Node;
-	class Sprite;
-}
+#include "ccimagefile.h"
 
 namespace Spriter2dX
 {
-
 	class CCFileFactory : public SpriterEngine::FileFactory
 	{
 	public:
-		typedef std::function<cocos2d::Sprite*(const std::string&)> SpriteLoader;
 		CCFileFactory(cocos2d::Node* parent, SpriteLoader loader);
 		~CCFileFactory();
 		

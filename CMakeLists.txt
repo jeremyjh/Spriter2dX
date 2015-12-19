@@ -19,7 +19,7 @@ set(SOURCE_FILES
         src/tinyxmlspriterfileattributewrapper.cpp
         src/tinyxmlspriterfiledocumentwrapper.cpp
         src/tinyxmlspriterfileelementwrapper.cpp
-        src/SpriterNode.cpp
+        src/AnimationNode.cpp
 )
 
 find_package(TINYXML2 REQUIRED)
