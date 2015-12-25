@@ -17,11 +17,46 @@ namespace cocos2d {
 }
 
 namespace Spriter2dX {
+
+
     class AnimationNode : public cocos2d::Node {
     public:
         AnimationNode(const std::string& scmlFile, SpriteLoader loader);
         void update (float dt) override;
-        SpriterEngine::EntityInstance* createEntity(const std::string& name);
+
+        /**
+         * Creates and schedules for maintenance a SpriterPlusPlus animation
+         * entity. Once the animation completes once it will be deleted, even if it
+         * is configured to loop. Use AnimationNode::play for looping animations.
+         * @memberof AnimationNode
+         * @param name Name of the Spriter Entity in the AnimationNode's model
+         * @return a SpriterEngine::EntityInstance which can be manipulated
+         * using the SpriterPlusPlus API.
+         */
+        SpriterEngine::EntityInstance* playOnce(const std::string &name);
+
+        /**
+         * Creates and schedules for maintenance a SpriterPlusPlus animation
+         * entity. It will be maintained until deleted using AnimationNode::deleteEntity.
+         * Note that the actual behavior depends on the Entity's looping configuration in Spriter;
+         * if the animation loops it will play continuously. Otherwise you can use the EntityInstance
+         * to resume playback when required.
+         * When the animation is no longer needed, it should be cleaned up with AnimationNode::deleteEntity.
+         * @memberof AnimationNode
+         * @param name Name of the Spriter Entity in the AnimationNode's model
+         * @return a SpriterEngine::EntityInstance which can be manipulated
+         * using the SpriterPlusPlus API.
+         */
+        SpriterEngine::EntityInstance* play(const std::string &name);
+
+        /**
+         * Remove and destroy the EntityInstance. Takes a reference to an
+         * EntityInstance* and will set it to nullptr after removing and deleting it.
+         * @memberof AnimationNode
+         * @param entity the EntityInstance to delete.
+         */
+        void deleteEntity(SpriterEngine::EntityInstance*& entity);
+
         static AnimationNode* create(const std::string& scmlFile, SpriteLoader loader = fileLoader());
 
         virtual void onEnter() override;
@@ -30,10 +65,8 @@ namespace Spriter2dX {
         static SpriteLoader fileLoader();
         static SpriteLoader cacheLoader();
     private:
-        CCFileFactory* files;
-        std::vector<std::unique_ptr<SpriterEngine::EntityInstance>> entities;
-        SpriterEngine::SpriterModel model;
-
+        class impl;
+        std::unique_ptr<impl> self;
     };
 }
 

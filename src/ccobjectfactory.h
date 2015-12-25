@@ -22,6 +22,7 @@ namespace Spriter2dX
 
 		SpriterEngine::BoneInstanceInfo *newBoneInstanceInfo(SpriterEngine::point size) override;
 
+		SpriterEngine::TriggerObjectInfo *newTriggerObjectInfo(std::string triggerName) override;
 	private:
 		cocos2d::Node* parent;
 	};

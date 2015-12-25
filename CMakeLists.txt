@@ -13,6 +13,7 @@ set(SOURCE_FILES
         src/ccfilefactory.cpp
         src/ccsoundobjectinforeference.cpp
         src/ccobjectfactory.cpp
+        src/cctriggerobjectinfo.cpp
         src/ccboxinstanceinfo.cpp
         src/ccboneinstanceinfo.cpp
         src/ccpointinstanceinfo.cpp

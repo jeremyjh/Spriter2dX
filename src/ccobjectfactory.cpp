@@ -3,7 +3,8 @@
 #include "ccpointinstanceinfo.h"
 #include "ccboxinstanceinfo.h"
 #include "ccboneinstanceinfo.h"
-#include "ccsoundobjectinforeference.h"
+
+#include "cctriggerobjectinfo.h"
 
 namespace cc = cocos2d;
 namespace se = SpriterEngine;
@@ -30,4 +31,7 @@ namespace Spriter2dX
 		return new CCBoneInstanceInfo(size, parent);
 	}
 
+    se::TriggerObjectInfo *CCObjectFactory::newTriggerObjectInfo(std::string triggerName) {
+        return new CCTriggerObjectInfo(triggerName);
+    }
 }
