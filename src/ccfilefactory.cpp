@@ -14,16 +14,9 @@ namespace Spriter2dX
 	class CCFileFactory::impl
 	{
 	public:
-		impl(cc::Node* parent, SpriteLoader loader) : parent(parent), loader(loader)
-		{
-			parent->retain();
-		}
+		impl(cc::Node* parent, SpriteLoader loader) : parent(parent), loader(loader) {}
 
-		~impl()
-		{
-			parent->release();
-		}
-
+		~impl() {}
 
 		se::ImageFile* newImageFile(const std::string&initialFilePath, se::point initialDefaultPivot)
 		{

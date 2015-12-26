@@ -22,6 +22,7 @@ namespace Spriter2dX {
     class AnimationNode : public cocos2d::Node {
     public:
         AnimationNode(const std::string& scmlFile, SpriteLoader loader);
+        ~AnimationNode ();
         void update (float dt) override;
 
         /**

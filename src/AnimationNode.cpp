@@ -15,18 +15,20 @@ namespace Spriter2dX {
 
     struct EntityCommand {
         EntityCommand(CommandType type, se::EntityInstance* entity) : type(type), entity(entity) {}
-        ~EntityCommand() {delete entity;}
         CommandType type;
-        SpriterEngine::EntityInstance* entity;
+        std::unique_ptr<se::EntityInstance> entity;
     };
 
     class AnimationNode::impl {
     public:
         impl(cc::Node* parent, SpriteLoader loader, const std::string& scmlFile)
                 : files(new CCFileFactory(parent,loader))
-                , model(scmlFile, files.get(), new CCObjectFactory(parent)) {}
+                , model(scmlFile, files, new CCObjectFactory(parent)) {}
 
-        void update(float dt) {
+        ~impl() {}
+
+        void update(float dt)
+        {
             files->resetSprites();
             auto removed =
                     std::remove_if(entities.begin(), entities.end(),
@@ -45,7 +47,8 @@ namespace Spriter2dX {
             entities.erase(removed, entities.end());
         }
 
-        se::EntityInstance* createEntity(const std::string &name, CommandType type) {
+        se::EntityInstance* createEntity(const std::string &name, CommandType type)
+        {
             se::EntityInstance* entity = model.getNewEntityInstance(name);
             entities.emplace_back(type, entity);
             return entity;
@@ -55,13 +58,14 @@ namespace Spriter2dX {
         {
             auto removed = std::remove_if(entities.begin(), entities.end(),
                                           [=](const EntityCommand& cmd){
-                                              return cmd.entity == remove;
+                                              return cmd.entity.get() == remove;
                                           });
             entities.erase(removed, entities.end());
             remove = nullptr;
         }
 
-        std::unique_ptr<CCFileFactory> files;
+    private:
+        CCFileFactory* files;
         std::vector<EntityCommand> entities;
         se::SpriterModel model;
     };
@@ -72,6 +76,8 @@ namespace Spriter2dX {
     AnimationNode::AnimationNode(const std::string& scmlFile, SpriteLoader loader)
             : self(new impl(this, loader, scmlFile)) {}
 
+    AnimationNode::~AnimationNode() {}
+
     void AnimationNode::update(float dt)
     {
         self->update(dt);
@@ -80,8 +86,7 @@ namespace Spriter2dX {
 
     se::EntityInstance* AnimationNode::playOnce(const std::string &name)
     {
-        se::EntityInstance* entity = self->createEntity(name, PlayOnce);
-        return entity;
+        return self->createEntity(name, PlayOnce);
     }
 
     SpriterEngine::EntityInstance *AnimationNode::play(const std::string &name) {
@@ -90,7 +95,7 @@ namespace Spriter2dX {
 
     AnimationNode* AnimationNode::create(const std::string& scmlFile, SpriteLoader loader)
     {
-        AnimationNode * ret = new (std::nothrow) AnimationNode(scmlFile, loader);
+        AnimationNode* ret = new (std::nothrow) AnimationNode(scmlFile, loader);
         if (ret && ret->init())
         {
             ret->autorelease();
@@ -107,7 +112,8 @@ namespace Spriter2dX {
         return [](const std::string& name) { return cc::Sprite::create(name);};
     }
 
-    std::vector<std::string> split(const std::string& s, char delim) {
+    std::vector<std::string> split(const std::string& s, char delim)
+    {
         std::stringstream ss(s);
         std::string item;
         std::vector<std::string> elems;
@@ -125,12 +131,14 @@ namespace Spriter2dX {
         };
     }
 
-    void AnimationNode::onEnter() {
+    void AnimationNode::onEnter()
+    {
         cc::Node::onEnter();
         this->scheduleUpdate();
     }
 
-    void AnimationNode::onExit() {
+    void AnimationNode::onExit()
+    {
         cc::Node::onExit();
         this->unscheduleUpdate();
     }
