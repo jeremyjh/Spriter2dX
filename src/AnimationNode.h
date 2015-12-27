@@ -18,6 +18,7 @@ namespace cocos2d {
 
 namespace Spriter2dX {
 
+    typedef std::function<void(SpriterEngine::EntityInstance*)> EntityEvent;
 
     class AnimationNode : public cocos2d::Node {
     public:
@@ -35,6 +36,8 @@ namespace Spriter2dX {
          * using the SpriterPlusPlus API.
          */
         SpriterEngine::EntityInstance* playOnce(const std::string &name);
+
+        SpriterEngine::EntityInstance* playOnce(const std::string &name, EntityEvent onComplete);
 
         /**
          * Creates and schedules for maintenance a SpriterPlusPlus animation

@@ -14,10 +14,14 @@ namespace Spriter2dX {
     enum CommandType {PlayOnce, PlayRepeat};
 
     struct EntityCommand {
-        EntityCommand(CommandType type, se::EntityInstance* entity) : type(type), entity(entity) {}
+        EntityCommand(CommandType type, se::EntityInstance* entity, EntityEvent onComplete)
+                : type(type), entity(entity), onComplete(onComplete) {}
         CommandType type;
         std::unique_ptr<se::EntityInstance> entity;
+        EntityEvent onComplete;
     };
+
+    void doNothing(se::EntityInstance*) {}
 
     class AnimationNode::impl {
     public:
@@ -38,6 +42,7 @@ namespace Spriter2dX {
                                        if (cmd.type == PlayOnce
                                            && (pre_ratio > .99f
                                               || pre_ratio > cmd.entity->getTimeRatio())) {
+                                           cmd.onComplete(cmd.entity.get());
                                            return true;
                                        }
                                        cmd.entity->playAllTriggers();
@@ -47,10 +52,12 @@ namespace Spriter2dX {
             entities.erase(removed, entities.end());
         }
 
-        se::EntityInstance* createEntity(const std::string &name, CommandType type)
+        se::EntityInstance* createEntity(const std::string &name
+                                        ,CommandType type
+                                        ,EntityEvent onComplete)
         {
             se::EntityInstance* entity = model.getNewEntityInstance(name);
-            entities.emplace_back(type, entity);
+            entities.emplace_back(type, entity, onComplete);
             return entity;
         }
 
@@ -86,11 +93,17 @@ namespace Spriter2dX {
 
     se::EntityInstance* AnimationNode::playOnce(const std::string &name)
     {
-        return self->createEntity(name, PlayOnce);
+        return self->createEntity(name, PlayOnce, doNothing);
+    }
+
+    se::EntityInstance* AnimationNode::playOnce(const std::string &name
+                                               ,EntityEvent onComplete)
+    {
+        return self->createEntity(name, PlayOnce, onComplete);
     }
 
     SpriterEngine::EntityInstance *AnimationNode::play(const std::string &name) {
-        return self->createEntity(name, PlayRepeat);
+        return self->createEntity(name, PlayRepeat, doNothing);
     }
 
     AnimationNode* AnimationNode::create(const std::string& scmlFile, SpriteLoader loader)
