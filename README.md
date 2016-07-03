@@ -4,11 +4,11 @@ This is based on the reference implementation's SFML example.
 
 There is an [example repository](https://github.com/jeremyjh/Spriter2dX-example) to demonstrate using this in a Cocos2d-X project.
 
-This is not quite finished, though it does work (only tested on Linux).
+This is not quite finished, though it does work (only tested on Android and Linux).
 
 Current limitations: 
    * debug drawings are not in yet.
-   * only Cmake project type is supported (Android coming soon).
+   * only Cmake and Android project types are supported
 
 ##Quick Start
 In the root of your Cocos2d-X project:
