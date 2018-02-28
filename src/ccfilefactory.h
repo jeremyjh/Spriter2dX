@@ -13,7 +13,7 @@ namespace Spriter2dX
 		CCFileFactory(cocos2d::Node* parent, SpriteLoader loader);
 		~CCFileFactory();
 		
-		SpriterEngine::ImageFile *newImageFile(const std::string& initialFilePath, SpriterEngine::point initialDefaultPivot) override;
+		SpriterEngine::ImageFile *newImageFile(const std::string& initialFilePath, SpriterEngine::point initialDefaultPivot, SpriterEngine::atlasdata atlasData) override;
 
 		SpriterEngine::SoundFile *newSoundFile(const std::string& initialFilePath) override;
 

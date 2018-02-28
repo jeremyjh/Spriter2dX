@@ -43,7 +43,7 @@ namespace Spriter2dX
 
 	CCFileFactory::~CCFileFactory() { }
 
-	se::ImageFile* CCFileFactory::newImageFile(const std::string&initialFilePath, se::point initialDefaultPivot)
+	se::ImageFile* CCFileFactory::newImageFile(const std::string&initialFilePath, se::point initialDefaultPivot, se::atlasdata atlasData)
 	{
 		return self->newImageFile(initialFilePath, initialDefaultPivot);
 	}
