@@ -10,7 +10,7 @@ Current limitations:
    * debug drawings are not in yet.
    * only Cmake and Android project types are supported
 
-##Quick Start
+## Quick Start
 In the root of your Cocos2d-X project:
 ```shell
 mkdir external
